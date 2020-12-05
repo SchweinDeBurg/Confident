@@ -25,6 +25,7 @@ std::string workingDir;
 bool recurseSubdirs = false;
 std::string cppExtensions("h,hh,hpp,c,cc,cpp,cxx");
 std::string includeDirs;
+std::string outputDir;
 
 // impementation helpers
 
@@ -58,6 +59,9 @@ static void prepareProgramOptions(bpo::options_description& bpoDescription)
 	genericArgs.add_options()("includes,i",
 		bpo::value<std::string>(&includeDirs)->default_value(includeDirs),
 		"colon-separated list of the additional include directories");
+	genericArgs.add_options()("output,o",
+		bpo::value<std::string>(&outputDir)->default_value(outputDir),
+		"output directory to write report");
 	genericArgs.add_options()("help,h", "display this help and exit");
 	genericArgs.add_options()("version,v", "print version string");
 

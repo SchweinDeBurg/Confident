@@ -213,3 +213,43 @@ size_t searchForIncludes(const char* filePath, TStringVector& systemList, TStrin
 	return (systemList.size() + ownList.size());
 }
 
+static void writeToStream(std::ostream& outputStream, const TStringVector& filesList)
+{
+	for (auto& it: filesList)
+	{
+		TStringVector systemList, ownList;
+		searchForIncludes(it.c_str(), systemList, ownList);
+		outputStream << std::endl << it << std::endl;
+		for (auto& it: systemList)
+		{
+			outputStream << "\t" << it << std::endl;
+		}
+		for (auto& it: ownList)
+		{
+			outputStream << "\t" << it << std::endl;
+		}
+	}
+}
+
+void createReport(void)
+{
+	TStringVector filesList;
+	if (searchForFiles(workingDir.c_str(), recurseSubdirs, filesList) > 0)
+	{
+		if (outputDir.empty())
+		{
+			writeToStream(std::cout, filesList);
+		}
+		else
+		{
+			bfs::path outputPath(outputDir);
+			outputPath /= "/";
+			outputPath /= bfs::path(workingDir).filename();
+			bfs::create_directories(outputPath.string());
+			outputPath /= "report.txt";
+			std::cout << outputPath.string() << std::endl;
+			std::ofstream fileStream(outputPath.string(), std::ios::trunc);
+			writeToStream(fileStream, filesList);
+		}
+	}
+}

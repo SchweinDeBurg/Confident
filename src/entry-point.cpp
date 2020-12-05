@@ -21,24 +21,7 @@ int main(int argc, char* argv[])
 	{
 		if (parseProgramOptions(argc, argv))
 		{
-			TStringVector filesList;
-			if (searchForFiles(workingDir.c_str(), recurseSubdirs, filesList))
-			{
-				for (auto& it: filesList)
-				{
-					std::cout << std::endl << it << std::endl;
-					TStringVector systemList, ownList;
-					searchForIncludes(it.c_str(), systemList, ownList);
-					for (auto& it: systemList)
-					{
-						std::cout << "\t" << it << std::endl;
-					}
-					for (auto& it: ownList)
-					{
-						std::cout << "\t" << it << std::endl;
-					}
-				}
-			}
+			createReport();
 		}
 		else
 		{
