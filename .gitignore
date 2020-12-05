@@ -1,0 +1,9 @@
+bin/Confident
+build/CMakeFiles/
+build/src/
+build/.ninja_deps
+build/.ninja_log
+build/CMakeCache.txt
+build/build.ninja
+build/cmake_install.cmake
+build/rules.ninja

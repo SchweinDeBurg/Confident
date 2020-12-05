@@ -1,0 +1,11 @@
+list(APPEND ${PROJECT_NAME}_HEADERS
+	common-defs.h
+)
+
+list(APPEND ${PROJECT_NAME}_SOURCES
+	entry-point.cpp
+)
+
+add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
+
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${BIN_INSTALL_PATH})
