@@ -185,7 +185,18 @@ size_t searchForIncludes(const char* filePath, TStringVector& systemList, TStrin
 				}
 				else if (matchResults[2] == "\"" && matchResults[4] == "\"")
 				{
-					ownList.push_back(matchResults[3]);
+					bfs::path curPath(filePath);
+					bfs::path includePath = curPath.parent_path();
+					includePath /= "/";
+					includePath /= matchResults[3];
+					if (bfs::exists(includePath) && bfs::is_regular_file(includePath))
+					{
+						ownList.push_back(includePath.string());
+					}
+					else
+					{
+						ownList.push_back(matchResults[2] + matchResults[3] + matchResults[4]);
+					}
 				}
 			}
 		}
