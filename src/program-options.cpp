@@ -13,6 +13,9 @@
 // Boost headers
 #include <boost/program_options.hpp>
 
+// our headers
+#include "common-defs.h"
+
 // shortcuts
 namespace bpo = boost::program_options;
 
@@ -20,6 +23,7 @@ namespace bpo = boost::program_options;
 
 std::string workingDir;
 bool recurseSubdirs = false;
+std::string cppExtensions("h,hh,hpp,c,cc,cpp,cxx");
 
 // impementation helpers
 
@@ -46,9 +50,10 @@ static void prepareProgramOptions(bpo::options_description& bpoDescription)
 	genericArgs.add_options()("directory,d",
 		bpo::value<std::string>(&workingDir)->default_value(workingDir),
 		"working directory to scan");
-	genericArgs.add_options()("recursive,r",
-		bpo::value<bool>(&recurseSubdirs)->default_value(recurseSubdirs),
-		"scan directories recursively");
+	genericArgs.add_options()("recursive,r", "scan directories recursively");
+	genericArgs.add_options()("extensions,e",
+		bpo::value<std::string>(&cppExtensions)->default_value(cppExtensions),
+		"comma-separated list of file extensions to search for");
 	genericArgs.add_options()("help,h", "display this help and exit");
 	genericArgs.add_options()("version,v", "print version string");
 
@@ -78,6 +83,8 @@ bool parseProgramOptions(int argc, char* argv[])
 			std::cout << "Confident version 0.1.0" << std::endl;
 			return (true);
 		}
+		recurseSubdirs = vmOptions.count("recursive") > 0;
+		return (true);
 	}
 	catch (const std::exception& err)
 	{

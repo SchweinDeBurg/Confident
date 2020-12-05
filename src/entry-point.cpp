@@ -21,6 +21,14 @@ int main(int argc, char* argv[])
 	{
 		if (parseProgramOptions(argc, argv))
 		{
+			TStringVector filesList;
+			if (searchForFiles(workingDir.c_str(), recurseSubdirs, filesList))
+			{
+				for (auto& it: filesList)
+				{
+					std::cout << it << std::endl;
+				}
+			}
 		}
 		else
 		{
