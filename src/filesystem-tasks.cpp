@@ -102,6 +102,17 @@ static size_t getSystemIncludePaths(TStringVector& pathsList)
 		}
 	}
 
+	if (!includeDirs.empty())
+	{
+		std::istringstream inputStream(includeDirs);
+		std::string curPath;
+		while (std::getline(inputStream, curPath, ':'))
+		{
+			curPath.append(1, '/');
+			pathsList.push_back(curPath);
+		}
+	}
+
 	return (pathsList.size());
 }
 

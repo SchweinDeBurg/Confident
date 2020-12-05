@@ -17,6 +17,7 @@ typedef std::vector<std::string> TStringVector;
 extern std::string workingDir;
 extern bool recurseSubdirs;
 extern std::string cppExtensions;
+extern std::string includeDirs;
 
 // program-options.cpp
 extern bool parseProgramOptions(int argc, char* argv[]);
