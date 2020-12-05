@@ -6,6 +6,11 @@
 
 // STL headers
 #include <exception>
+#include <iostream>
+#include <string>
+
+// our headers
+#include "common-defs.h"
 
 // entry point itself
 int main(int argc, char* argv[])
@@ -14,9 +19,17 @@ int main(int argc, char* argv[])
 
 	try
 	{
+		if (parseProgramOptions(argc, argv))
+		{
+		}
+		else
+		{
+			result = EXIT_FAILURE;
+		}
 	}
 	catch (const std::exception& err)
 	{
+		std::cerr << err.what() << std::endl;
 		result = EXIT_FAILURE;
 	}
 
