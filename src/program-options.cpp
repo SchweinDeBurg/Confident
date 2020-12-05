@@ -30,7 +30,7 @@ std::string cppExtensions("h,hh,hpp,c,cc,cpp,cxx");
 static bool getCurrentWorkingDirectory(std::string& workingDir)
 {
 	char dirBuf[PATH_MAX] = { 0 };
-	if (getcwd(dirBuf, sizeof(dirBuf)) != NULL)
+	if (getcwd(dirBuf, sizeof(dirBuf)) != nullptr)
 	{
 		workingDir.assign(dirBuf);
 		return (true);

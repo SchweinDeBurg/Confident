@@ -8,9 +8,10 @@ list(APPEND ${PROJECT_NAME}_SOURCES
 	program-options.cpp
 )
 
-find_package(Boost 1.63.0 COMPONENTS program_options filesystem REQUIRED)
+find_package(Boost 1.63.0 COMPONENTS filesystem program_options regex REQUIRED)
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
+#add_dependencies(${PROJECT_NAME} dependency-graph)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${Boost_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})

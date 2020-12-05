@@ -26,7 +26,17 @@ int main(int argc, char* argv[])
 			{
 				for (auto& it: filesList)
 				{
-					std::cout << it << std::endl;
+					std::cout << std::endl << it << std::endl;
+					TStringVector systemList, ownList;
+					searchForIncludes(it.c_str(), systemList, ownList);
+					for (auto& it: systemList)
+					{
+						std::cout << "\t" << it << std::endl;
+					}
+					for (auto& it: ownList)
+					{
+						std::cout << "\t" << it << std::endl;
+					}
 				}
 			}
 		}

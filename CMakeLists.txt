@@ -5,6 +5,8 @@ project(Confident)
 include(FindPkgConfig)
 include(GNUInstallDirs)
 
+include(cmake/DependencyGraph.cmake)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(BIN_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR} CACHE PATH "Install path for binaries")
 
