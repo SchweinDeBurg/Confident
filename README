@@ -1,0 +1,27 @@
+Confident is a very simple dependency analyzer for C/C++ projects.
+
+Build requirements:
+	boost-devel >= 1.64.0
+	glibc-devel >= 2.26
+	libstdc++-devel >= 7.3.1
+
+Build requirements (tools):
+	cmake >= 3.14.7
+	gcc-c++ >= 7.3.1
+	git >= 2.29.2
+	graphviz >= 2.40.1
+	ninja-build >= 1.10.2
+	sed >= 4.2.2
+
+Run-time requirements:
+	boost-filesystem >= 1.64.0
+	boost-program-options >= 1.64.0
+	boost-regex >= 1.64.0
+	boost-system >= 1.64.0
+	glibc >= 2.26
+	libgcc >= 7.3.1
+	libstdc++ >= 7.3.1
+
+Run-time requirements (optional):
+	cmake >= 3.14.7
+	graphviz >= 2.40.1
