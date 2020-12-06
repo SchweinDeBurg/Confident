@@ -15,24 +15,20 @@
 // entry point itself
 int main(int argc, char* argv[])
 {
-	int result = EXIT_SUCCESS;
+	int exitCode = EXIT_SUCCESS;
 
 	try
 	{
 		if (parseProgramOptions(argc, argv))
 		{
-			createReport();
-		}
-		else
-		{
-			result = EXIT_FAILURE;
+			exitCode = createReport() ? EXIT_SUCCESS : EXIT_FAILURE;
 		}
 	}
 	catch (const std::exception& err)
 	{
 		std::cerr << err.what() << std::endl;
-		result = EXIT_FAILURE;
+		exitCode = EXIT_FAILURE;
 	}
 
-	return (result);
+	return (exitCode);
 }

@@ -24,8 +24,6 @@ extern std::string outputDir;
 extern bool parseProgramOptions(int argc, char* argv[]);
 
 // filesystem-tasks.cpp
-extern size_t searchForFiles(const char* workingDir, bool recurseSubdirs, TStringVector& filesList);
-extern size_t searchForIncludes(const char* filePath, TStringVector& systemList, TStringVector& ownList);
-extern void createReport(void);
+extern bool createReport(void);
 
 #endif   // __common_defs_h

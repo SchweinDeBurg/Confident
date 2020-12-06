@@ -116,9 +116,7 @@ static size_t getSystemIncludePaths(TStringVector& pathsList)
 	return (pathsList.size());
 }
 
-// public functions
-
-size_t searchForFiles(const char* workingDir, bool recurseSubdirs, TStringVector& filesList)
+static size_t searchForFiles(const char* workingDir, bool recurseSubdirs, TStringVector& filesList)
 {
 	filesList.clear();
 
@@ -146,7 +144,7 @@ size_t searchForFiles(const char* workingDir, bool recurseSubdirs, TStringVector
 	return (filesList.size());
 }
 
-size_t searchForIncludes(const char* filePath, TStringVector& systemList, TStringVector& ownList)
+static size_t searchForIncludes(const char* filePath, TStringVector& systemList, TStringVector& ownList)
 {
 	systemList.clear();
 	ownList.clear();
@@ -213,32 +211,42 @@ size_t searchForIncludes(const char* filePath, TStringVector& systemList, TStrin
 	return (systemList.size() + ownList.size());
 }
 
-static void writeToStream(std::ostream& outputStream, const TStringVector& filesList)
+static bool writeReportToStream(std::ostream& outputStream, const TStringVector& filesList)
 {
-	for (auto& it: filesList)
+	if (outputStream.good())
 	{
-		TStringVector systemList, ownList;
-		searchForIncludes(it.c_str(), systemList, ownList);
-		outputStream << std::endl << it << std::endl;
-		for (auto& it: systemList)
+		outputStream << "Results for the working directory: " << workingDir << std::endl;
+		for (auto& it: filesList)
 		{
-			outputStream << "\t" << it << std::endl;
+			TStringVector systemList, ownList;
+			searchForIncludes(it.c_str(), systemList, ownList);
+			outputStream << std::endl << it << std::endl;
+			for (auto& it: systemList)
+			{
+				outputStream << "\t" << it << std::endl;
+			}
+			for (auto& it: ownList)
+			{
+				outputStream << "\t" << it << std::endl;
+			}
 		}
-		for (auto& it: ownList)
-		{
-			outputStream << "\t" << it << std::endl;
-		}
+	}
+	else
+	{
+		return (false);
 	}
 }
 
-void createReport(void)
+// public functions
+
+bool createReport(void)
 {
 	TStringVector filesList;
 	if (searchForFiles(workingDir.c_str(), recurseSubdirs, filesList) > 0)
 	{
 		if (outputDir.empty())
 		{
-			writeToStream(std::cout, filesList);
+			return (writeReportToStream(std::cout, filesList));
 		}
 		else
 		{
@@ -249,7 +257,7 @@ void createReport(void)
 			outputPath /= "report.txt";
 			std::cout << outputPath.string() << std::endl;
 			std::ofstream fileStream(outputPath.string(), std::ios::trunc);
-			writeToStream(fileStream, filesList);
+			return (writeReportToStream(fileStream, filesList));
 		}
 	}
 }

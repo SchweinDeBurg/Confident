@@ -75,28 +75,23 @@ bool parseProgramOptions(int argc, char* argv[])
 	bpo::options_description bpoDescription;
 	bpo::variables_map vmOptions;
 
-	try
-	{
-		prepareProgramOptions(bpoDescription);
-		bpo::store(bpo::parse_command_line(argc, argv, bpoDescription), vmOptions);
-		bpo::notify(vmOptions);
+	prepareProgramOptions(bpoDescription);
+	bpo::store(bpo::parse_command_line(argc, argv, bpoDescription), vmOptions);
+	bpo::notify(vmOptions);
 
-		if (vmOptions.count("help") > 0)
-		{
-			std::cout << bpoDescription << std::endl;
-			return (true);
-		}
-		else if (vmOptions.count("version") > 0)
-		{
-			std::cout << "Confident version 0.1.0" << std::endl;
-			return (true);
-		}
+	if (vmOptions.count("help") > 0)
+	{
+		std::cout << bpoDescription << std::endl;
+		return (false);
+	}
+	else if (vmOptions.count("version") > 0)
+	{
+		std::cout << "Confident version 0.1.0" << std::endl;
+		return (false);
+	}
+	else
+	{
 		recurseSubdirs = vmOptions.count("recursive") > 0;
 		return (true);
-	}
-	catch (const std::exception& err)
-	{
-		std::cerr << err.what() << std::endl;
-		return (false);
 	}
 }
