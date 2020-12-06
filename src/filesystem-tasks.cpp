@@ -240,7 +240,10 @@ static bool searchForProgram(const char* exeName, std::string& exePath)
 					if ((pathLength = readlink(curPath.c_str(), pathBuf, sizeof(pathBuf) - 1)) != -1)
 					{
 						pathBuf[pathLength] = 0;
-						exePath.assign(pathBuf);
+						if (bfs::exists(bfs::path(pathBuf)) && bfs::is_regular_file(bfs::path(pathBuf)))
+						{
+							exePath.assign(pathBuf);
+						}
 					}
 					else
 					{
