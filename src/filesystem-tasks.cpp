@@ -2,7 +2,10 @@
 // written by Elijah Zarezky
 
 // GNU libc headers
+#include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 
  // STL headers
 #include <algorithm>
@@ -211,6 +214,46 @@ static size_t searchForIncludes(const char* filePath, TStringVector& systemList,
 	return (systemList.size() + ownList.size());
 }
 
+static bool searchForProgram(const char* exeName, std::string& exePath)
+{
+	exePath.clear();
+
+	if (exeName != nullptr && *exeName != 0)
+	{
+		char* envPath = getenv("PATH");
+		if (envPath != nullptr && *envPath != 0)
+		{
+			std::istringstream inputStream(envPath);
+			std::string curPath;
+			while (std::getline(inputStream, curPath, ':') && exePath.empty())
+			{
+				curPath.append(1, '/');
+				curPath.append(exeName);
+				if (bfs::is_regular_file(bfs::path(curPath)))
+				{
+					exePath.assign(curPath);
+				}
+				else if (bfs::is_symlink(bfs::path(curPath)))
+				{
+					char pathBuf[PATH_MAX] = { 0 };
+					ssize_t pathLength = 0;
+					if ((pathLength = readlink(curPath.c_str(), pathBuf, sizeof(pathBuf) - 1)) != -1)
+					{
+						pathBuf[pathLength] = 0;
+						exePath.assign(pathBuf);
+					}
+					else
+					{
+						throw std::runtime_error("readlink() failed!");
+					}
+				}
+			}
+		}
+	}
+
+	return (exePath.length() > 0);
+}
+
 static bool writeReportToStream(std::ostream& outputStream, const TStringVector& filesList)
 {
 	if (outputStream.good())
@@ -254,9 +297,46 @@ bool createReport(void)
 			outputPath /= "/";
 			outputPath /= bfs::path(workingDir).filename();
 			bfs::create_directories(outputPath.string());
+
+			bfs::path cmakeListsPath(workingDir + "/CMakeLists.txt");
+			if (bfs::exists(cmakeListsPath) && bfs::is_regular_file(cmakeListsPath))
+			{
+				std::string cmakeExe;
+				std::string dotExe;
+				if (searchForProgram("cmake", cmakeExe) && searchForProgram("dot", dotExe))
+				{
+					std::string processOutput;
+
+					cmakeExe.append(" -Wno-dev --graphviz=");
+					cmakeExe.append(outputPath.string());
+					cmakeExe.append(1, '/');
+					cmakeExe.append(bfs::path(workingDir).filename().string());
+					cmakeExe.append(".dot -S ");
+					cmakeExe.append(workingDir);
+					cmakeExe.append(" -B ");
+					cmakeExe.append(outputPath.string() + "/build");
+					std::cout << "Running " << cmakeExe << std::endl;
+					executeProcess(cmakeExe.c_str(), processOutput);
+					bfs::remove_all(outputPath / "build");
+
+					dotExe.append(" -Tpng ");
+					dotExe.append(outputPath.string());
+					dotExe.append(1, '/');
+					dotExe.append(bfs::path(workingDir).filename().string());
+					dotExe.append(".dot -o ");
+					dotExe.append(outputPath.string());
+					dotExe.append(1, '/');
+					dotExe.append(bfs::path(workingDir).filename().string());
+					dotExe.append(".png");
+					std::cout << "Running " << dotExe << std::endl;
+					executeProcess(dotExe.c_str(), processOutput);
+				}
+			}
+
 			outputPath /= "report.txt";
-			std::cout << outputPath.string() << std::endl;
+			std::cout << "Report will be written to a file: " << outputPath.string() << std::endl;
 			std::ofstream fileStream(outputPath.string(), std::ios::trunc);
+
 			return (writeReportToStream(fileStream, filesList));
 		}
 	}
