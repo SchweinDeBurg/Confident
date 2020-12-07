@@ -33,7 +33,7 @@ function atExit()
 set -e
 trap atExit EXIT
 
-rpmbuild -ba --clean "${thisDir}/dist/rpm/Confident-0.1.0-fedora.spec" \
+rpmbuild -ba --clean "${thisDir}/dist/rpm/Confident-0.1.1-fedora.spec" \
 	--define "GitRepoDir ${thisDir}" \
 	--with gitsource --with gitupdate --with gitvernum --with ccache \
-2>&1 | tee "$(rpm --eval='%{_builddir}')/Confident-0.1.0-rpmbuild.log"
+2>&1 | tee "$(rpm --eval='%{_builddir}')/Confident-0.1.1-rpmbuild.log"

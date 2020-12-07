@@ -1,7 +1,7 @@
 # Confident utility RPM .spec file
 #
 # Common usage:
-#   rpmbuild -ba --clean "$(rpm --eval='%{_specdir}')/Confident-0.1.0-fedora.spec"
+#   rpmbuild -ba --clean "$(rpm --eval='%{_specdir}')/Confident-0.1.1-fedora.spec"
 #
 # Possible additional switches:
 #   --without nativearch (don't tune the performance of the code code for the host machine)
@@ -19,7 +19,7 @@
 #   --with ccache (use a fast C/C++ compiler cache during build)
 #
 # Saving rpmbuild output:
-#   2>&1 | tee "$(rpm --eval='%{_builddir}')/Confident-0.1.0-rpmbuild.log"
+#   2>&1 | tee "$(rpm --eval='%{_builddir}')/Confident-0.1.1-rpmbuild.log"
 
 # Acceptable build conditions
 
@@ -45,7 +45,7 @@
 
 %define VerMajor           0
 %define VerMinor           1
-%define VerMicro           0
+%define VerMicro           1
 
 %define Revision           1
 
@@ -378,6 +378,10 @@ find %{buildroot} -name '*.la' -exec %{__rm} -f {} ';'
 # Changes in the package
 
 %changelog
+* Mon Dec 07 2020 Elijah Zarezky <elijah@zarezky.spb.ru> - 0.1.1-1
+- Updated to the latest version 0.1.1.
+- Built using "--with gitsource --with gitvernum".
+
 * Sun Dec 06 2020 Elijah Zarezky <elijah@zarezky.spb.ru> - 0.1.0-1
 - Initial package.
 - Built using "--with gitsource --with gitvernum".

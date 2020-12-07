@@ -86,7 +86,7 @@ bool parseProgramOptions(int argc, char* argv[])
 	}
 	else if (vmOptions.count("version") > 0)
 	{
-		std::cout << "Confident version 0.1.0" << std::endl;
+		std::cout << "Confident version 0.1.1" << std::endl;
 		return (false);
 	}
 	else
